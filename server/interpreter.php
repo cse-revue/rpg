@@ -80,6 +80,20 @@ class Interpreter {
 
         case "inventory": return $this->inventory();
 
+        case "help":
+            return <<<EOT
+Commands
+
+go <direction>: go in a direction
+look: look around a room
+open: open an item
+close: close an item
+take: take an item
+examine: examine an item
+
+EOT
+;
+
         case "restart":
                           session_destroy();
                           return "restarting...";
