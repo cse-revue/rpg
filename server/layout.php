@@ -32,6 +32,7 @@ $living_room->connect("aft", $foyer);
 $living_room->connect("fore", $kitchen);
 $kitchen->connect("aft", $living_room);
 $landing->connect("east", $steves_room);
+$steves_room->connect("west", $landing);
 
 $rooms = array();
 foreach ($room_array as $room) {

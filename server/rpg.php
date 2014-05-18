@@ -17,7 +17,7 @@ init_rooms();
 
 $i->room = $rooms[$_SESSION['room']];
 
-echo nl2br($i->interpret($_POST['input']));
+echo nl2br(htmlspecialchars($i->interpret($_POST['input'])));
 
 save_flags();
 save_inventory();
