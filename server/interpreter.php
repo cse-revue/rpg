@@ -106,7 +106,6 @@ EOT
                           }
         }
 
-        return print_r($words);
     }
 
     private function examine($thing) {
