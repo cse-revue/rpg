@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script type="application/x-javascript" src="client/jquery.min.js"></script>
+<script type="application/x-javascript" src="client/client.js"></script>
+<script type="application/x-javascript" src="client/console.js"></script>
+
+<style>
+    * {
+        font: normal normal normal 115%/normal 
+                'Monaco', 'Courier New', 'DejaVu Sans Mono', 
+                'Bitstream Vera Sans Mono', monospace !important;
+    }
+    #console-output {
+        overflow: auto;
+        position:absolute;
+        top:0px;
+        left:10px;
+        right:10px;
+        bottom:45px;
+    }
+
+    #console-input {
+        position:absolute;
+        bottom:0px;
+        left:1em;
+        width:90%;
+    }
+
+    #console-prompt {
+        position:absolute;
+        bottom:0px;
+        left:5px;
+        height:30px;
+    }
+
+</style>
+</head>
+<body>
+
+<div id="console-output">
+</div>
+<div id="console-prompt">
+&gt;
+</div>
+<input id="console-input"/>
+</body>
+</html>
