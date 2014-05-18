@@ -2,7 +2,7 @@ function Interpreter() {
 }
 
 Interpreter.prototype.evaluate = function(str, after) {
-    $.post('/server/rpg.php', {input: str}, after);
+    $.post('server/rpg.php', {input: str}, after);
 }
 
 $(function() {
