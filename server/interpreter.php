@@ -12,7 +12,7 @@ class Interpreter {
 
         switch ($words[0]) {
         case "go": return $this->go($words[1]);
-        case "look": return sprintf("[%s]\n%s", $this->room->name, $this->room->description);
+        case "look": return $this->look();
 
         case "open":
                      switch ($this->room->id) {
@@ -80,8 +80,23 @@ class Interpreter {
 
         case "inventory": return $this->inventory();
 
-        case "help":
-            return <<<EOT
+        case "help": return $this->help();
+        case "restart":
+                          session_destroy();
+                          return "restarting...";
+
+        default: 
+                          if ($this->go_test($words[0])) {
+                              return $this->go($words[0]);
+                          } else {
+                              return "Unknown command.";
+                          }
+        }
+
+    }
+
+    public function help() {
+        return <<<EOT
 Commands
 
 go <direction>: go in a direction
@@ -95,19 +110,10 @@ help: print this message
 
 EOT
 ;
+    }
 
-        case "restart":
-                          session_destroy();
-                          return "restarting...";
-
-        default: 
-                          if ($this->go_test($words[0])) {
-                              return $this->go($words[0]);
-                          } else {
-                              return "Unknown command.";
-                          }
-        }
-
+    public function look() {
+        return sprintf("[%s]\n%s", $this->room->name, $this->room->description);
     }
 
     private function examine($thing) {
@@ -169,7 +175,7 @@ EOT
         }
 
         $this->change_room($this->room->exits[$direction]);
-        return sprintf("%s\nYou go %s.\n[%s]", $unlock_msg, $direction, $this->room->name);
+        return sprintf("%s\nYou go %s.\n[%s]\n%s", $unlock_msg, $direction, $this->room->name, $this->room->description);
     }
 
     private function go_test($direction) {

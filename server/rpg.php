@@ -17,7 +17,19 @@ init_rooms();
 
 $i->room = $rooms[$_SESSION['room']];
 
-echo nl2br(htmlspecialchars($i->interpret($_POST['input'])));
+if (isset($_POST['input'])) {
+    echo nl2br(htmlspecialchars($i->interpret($_POST['input'])));
+} else {
+    echo nl2br(htmlspecialchars(sprintf(<<<EOT
+Welcome to "Middle Earth"! Your goal is to get to Steve's room.
+
+%s
+%s
+EOT
+, $i->help(), $i->look())));
+ 
+}
+
 
 save_flags();
 save_inventory();
