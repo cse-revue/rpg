@@ -71,14 +71,16 @@ class Interpreter {
                                      inventory_add_item('key', "it has a label: \"Steve's Room\".");
                                      return "You take the key.";
 
-                                 default: return "You can't take that!";
+                                 default: return $this->take($words[1]);
                              }
-                         default: return "You can't take that!";
+                         default: return $this->take($words[1]);
                      }
 
         case "examine": return $this->examine($words[1]);
 
         case "inventory": return $this->inventory();
+
+        case "drop": return $this->drop($words[1]);
 
         case "help": return $this->help();
         case "restart":
@@ -113,7 +115,36 @@ EOT
     }
 
     public function look() {
-        return sprintf("[%s]\n%s", $this->room->name, $this->room->description);
+        $str = sprintf("[%s]\n%s\n", $this->room->name, $this->room->description);
+        $items = array();
+        $room_inventory = room_inventory_as_array($this->room->id); 
+        foreach ($room_inventory as $item => $description) {
+            $items[] = $item;
+        }
+        if (!empty($items)) {
+            foreach ($items as $item) {
+                $str .= sprintf("There is a %s here.\n", $item);
+            }
+        }
+        return $str;
+    }
+
+    private function take($thing) {
+        if (room_inventory_has_item($this->room->id, $thing)) {
+            take_from_room($this->room->id, $thing);
+            return sprintf("You take the %s.", $thing);
+        } else {
+            return "This room does not contain that item.";
+        }
+    }
+
+    private function drop($thing) {
+        if (inventory_has_item($thing)) {
+            drop_in_room($this->room->id, $thing);
+            return sprintf("Dropped %s.", $thing);
+        } else {
+            return "You don't have that item.";
+        }
     }
 
     private function examine($thing) {
@@ -164,7 +195,12 @@ EOT
     }
 
     private function go($direction) {
-        $unlock_msg = $this->room->unlock_test($direction);
+        
+        if ($this->room->is_locked($direction)) {
+            $unlock_msg = $this->room->unlock_test($direction);
+        } else {
+            $unlock_msg = "";
+        }
 
         if ($this->room->is_locked($direction)) {
             return $this->room->lock_msg($direction);
@@ -175,6 +211,7 @@ EOT
         }
 
         $this->change_room($this->room->exits[$direction]);
+        $this->room->on_enter();
         return sprintf("%s\nYou go %s.\n[%s]\n%s", $unlock_msg, $direction, $this->room->name, $this->room->description);
     }
 

@@ -7,15 +7,17 @@ include_once('inventory.php');
 $i = new Interpreter();
 session_start();
 
-if (!isset($_SESSION['room'])) {
-    $_SESSION['room'] = 'foyer';
-}
-
 init_flags();
 init_inventory();
 init_rooms();
 
-$i->room = $rooms[$_SESSION['room']];
+if (!isset($_SESSION['room'])) {
+    $_SESSION['room'] = 'foyer';
+    init_room_inventory($all_rooms);
+}
+
+
+$i->room = $all_rooms[$_SESSION['room']];
 
 if (isset($_POST['input'])) {
     echo nl2br(htmlspecialchars($i->interpret($_POST['input'])));

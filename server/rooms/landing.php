@@ -7,7 +7,7 @@ class Landing extends Room {
     public $name = "Landing at top of stairs";
     public $id = "landing";
     public $description = <<<EOT
-There is a staircais going down.
+There is a staircais going down. A foul wind blows from the west.
 There are doors to the north, east, south and west.
 EOT
 ;
