@@ -18,5 +18,8 @@ $(function() {
     window.onresize = function() {
         game_console.scroll_to_bottom();
     }
+
+    $('#console-input').val('help');
+    game_console.process();
 });
 
