@@ -19,11 +19,10 @@ You are eaten by the grue.
 You die.
 
 
-Restarting...
+Restarting...\n
 EOT
 ));
-            session_destroy();
-            exit;
+            restart();
         }
     }
 }

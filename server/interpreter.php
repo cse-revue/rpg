@@ -187,6 +187,9 @@ EOT
             }
             $str .= "\n";
         }
+        if ($str == "") {
+            $str = "(no items)";
+        }
         return $str;
     }
 

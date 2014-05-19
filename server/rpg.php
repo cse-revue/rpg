@@ -22,6 +22,16 @@ $i->room = $all_rooms[$_SESSION['room']];
 if (isset($_POST['input'])) {
     echo nl2br(htmlspecialchars($i->interpret($_POST['input'])));
 } else {
+    startup_text();
+}
+
+
+save_flags();
+save_inventory();
+
+function startup_text() {
+    global $i;
+
     echo nl2br(htmlspecialchars(sprintf(<<<EOT
 Welcome to "Middle Earth"! Your goal is to get to Steve's room.
 
@@ -32,7 +42,17 @@ EOT
  
 }
 
+function restart() {
+    global $all_rooms;
+    global $i;
 
-save_flags();
-save_inventory();
+    session_destroy();
+    $_SESSION['room'] = 'foyer';
+    $i->room = $all_rooms[$_SESSION['room']];
+    init_room_inventory($all_rooms);
+
+    echo nl2br(htmlspecialchars($i->look()));
+    exit;
+}
+
 ?>
