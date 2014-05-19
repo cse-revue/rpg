@@ -81,7 +81,7 @@ class Interpreter {
         case "inventory": return $this->inventory();
 
         case "drop": return $this->drop($words[1]);
-
+        case "exits": return $this->exits();
         case "help": return $this->help();
         case "restart":
                           session_destroy();
@@ -109,6 +109,7 @@ take: take an item
 drop: drop an item from your inventory
 examine: examine an item
 inventory: print out list of items in inventory
+exits: list the directions you can travel out of this room
 help: print this message
 
 EOT
@@ -126,6 +127,21 @@ EOT
             foreach ($items as $item) {
                 $str .= sprintf("There is a %s here.\n", $item);
             }
+        }
+
+        return $str;
+    }
+
+    private function exits() {
+        $str = "";
+        $exits = array_keys($this->room->exits);
+        $num_exits = count($exits);
+        if ($num_exits == 1) {
+            $str .= sprintf("This room has an exit to the %s.\n", $exits[0]);
+        } else if ($num_exits > 1) {
+            $str .= "This room has exits to the ";
+            $start = join(", ", array_slice($exits, 0, $num_exits - 1));
+            $str .= sprintf("%s and %s.", $start, $exits[$num_exits - 1]);
         }
         return $str;
     }
