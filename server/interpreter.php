@@ -90,6 +90,8 @@ open: open an item
 close: close an item
 take: take an item
 examine: examine an item
+inventory: print out list of items in inventory
+help: print this message
 
 EOT
 ;
