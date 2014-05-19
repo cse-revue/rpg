@@ -106,6 +106,7 @@ look: look around a room
 open: open an item
 close: close an item
 take: take an item
+drop: drop an item from your inventory
 examine: examine an item
 inventory: print out list of items in inventory
 help: print this message
