@@ -145,7 +145,7 @@ EOT
 
         $this->change_room($this->room->exits[$direction]);
         $this->room->on_enter();
-        return sprintf("%s\nYou go %s.\n[%s]\n%s", $unlock_msg, $direction, $this->room->name, $this->room->description);
+        return sprintf("%sYou go %s.\n[%s]\n%s", $unlock_msg, $direction, $this->room->name, $this->room->description);
     }
 
     private function go_test($direction) {
