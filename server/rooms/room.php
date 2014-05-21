@@ -7,6 +7,15 @@ class Room {
     public $name = "Room";
     public $id = "room";
 
+    protected $verbs;
+
+    public function apply_verb($verb, $item) {
+        if (isset($this->verbs[$verb])) {
+            return $this->verbs[$verb]($item);
+        }
+        return null;
+    }
+
     # called from layout to connect rooms together
     public function connect($ex, $room) {
         $this->exits[$ex] = $room;
@@ -49,4 +58,5 @@ class Room {
     public function on_enter() {
 
     }
+
 }

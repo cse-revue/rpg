@@ -10,82 +10,24 @@ class Interpreter {
     public function interpret($command) {
         $words = split(" +", $command);
 
+        // test for room specific verb
+        if (isset($words[1])) {
+            $room_specific = $this->room->apply_verb($words[0], $words[1]);
+            if ($room_specific != null) {
+                return $room_specific;
+            }
+        }
+        
+        // test for all the builtin commands
         switch ($words[0]) {
         case "go": return $this->go($words[1]);
         case "look": return $this->look();
-
-        case "open":
-                     switch ($this->room->id) {
-                         case "kitchen":
-                             switch ($words[1]) {
-                                 case "fridge": 
-                                     if (test_flag('fridge_open')) {
-                                         return "The fridge is already open.";
-                                     }
-                                     set_flag('fridge_open');
-                                     $str = "You open the fridge.\n";
-                                     $str .= $this->examine("fridge");
-                                     return $str;
-
-                                 default:
-                                     return "You can't open that!";
-                             }
-
-                         default:
-                             return "You can't open that!";
-                     }
-
-
-        case "close":
-                     switch ($this->room->id) {
-                         case "kitchen":
-                             switch ($words[1]) {
-                                 case "fridge":
-                                     if (!test_flag('fridge_open')) {
-                                         return "The fridge is already closed";
-                                     }
-                                     clear_flag('fridge_open');
-                                     return "You close the fridge.";
-                                 default:
-                                     return "You can't close that!";
-                             }
-
-                         default:
-                             return "You can't close that!";
-                     }
-
-        case "take":
-                     switch ($this->room->id) {
-                         case "kitchen":
-                             switch ($words[1]) {
-                                 case "milk":
-                                     if (test_flag('taken_milk')) return "The milk is no longer there.";
-                                     if (!test_flag('fridge_open')) return "You can't see milk.";
-                                     set_flag('taken_milk');
-                                     inventory_add_item('milk', "it smells funny");
-                                     return "You take the milk.";
-                                 case "key":
-                                     if (test_flag('taken_key')) return "The key is no longer there.";
-                                     if (!test_flag('fridge_open')) return "You can't see a key.";
-                                     set_flag('taken_key');
-                                     inventory_add_item('key', "it has a label: \"Steve's Room\".");
-                                     return "You take the key.";
-
-                                 default: return $this->take($words[1]);
-                             }
-                         default: return $this->take($words[1]);
-                     }
-
-        case "examine": return $this->examine($words[1]);
-
+        case "take": return $this->take($words[1]);
         case "inventory": return $this->inventory();
-
         case "drop": return $this->drop($words[1]);
         case "exits": return $this->exits();
         case "help": return $this->help();
-        case "restart":
-                          session_destroy();
-                          return "restarting...";
+        case "restart": restart();
 
         default: 
                           if ($this->go_test($words[0])) {
@@ -107,7 +49,6 @@ open: open an item
 close: close an item
 take: take an item
 drop: drop an item from your inventory
-examine: examine an item
 inventory: print out list of items in inventory
 exits: list the directions you can travel out of this room
 help: print this message
@@ -164,34 +105,6 @@ EOT
         }
     }
 
-    private function examine($thing) {
-        switch ($this->room->id) {
-            case "kitchen":
-                switch ($thing) {
-                    case "fridge": 
-                        if (!test_flag('fridge_open')) return "It is closed.";
-                        $str = "It contains:\n";
-                        $fridge_empty = true;
-                        if (!test_flag('taken_milk')) {
-                            $fridge_empty = false;
-                            $str .= "Spoilt Milk\n";
-                        }
-                        if (!test_flag('taken_key')) {
-                            $fridge_empty = false;
-                            $str .= "Key labeled \"Steve's Room\"";
-                        }
-                        if ($fridge_empty) {
-                            $str .= "(nothing)";
-                        }
-                        return $str;
-
-                    default:
-                        return "You can't examine that!";
-                }
-            default:
-                return "You can't examine that!";
-        }
-    }
 
     private function inventory() {
         $inventory = inventory_as_array();
