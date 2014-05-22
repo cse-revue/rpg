@@ -20,7 +20,11 @@ if (!isset($_SESSION['room'])) {
 $i->room = $all_rooms[$_SESSION['room']];
 
 if (isset($_POST['input'])) {
-    echo nl2br(htmlspecialchars($i->interpret($_POST['input'])));
+    $output = $i->interpret($_POST['input']);
+    if ($output == null) {
+        $output = "I don't know how to do that.";
+    }
+    echo nl2br(htmlspecialchars($output));
 } else {
     startup_text();
 }

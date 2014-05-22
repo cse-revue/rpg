@@ -7,6 +7,7 @@ class Kitchen extends Room {
     public $description = <<<EOT
 There is a fridge in the corner.
 The living room is to the aft.
+To your right is a darkened doorway.
 EOT
 ;
 
@@ -18,8 +19,8 @@ EOT
         }
 
         $this->verbs = array(
-            "open" => function($item) {
-                switch ($item) {
+            "open" => function($rest) {
+                switch ($rest[0]) {
                 case "fridge":
                     if (test_flag('fridge_open')) {
                         return "The fridge is already open";
@@ -30,8 +31,8 @@ EOT
                     return null;
                 }
             },
-            "close" => function($item) {
-                switch ($item) {
+            "close" => function($rest) {
+                switch ($rest[0]) {
                 case "fridge":
                     if (!test_flag('fridge_open')) {
                         return "The fridge is already closed";
@@ -43,8 +44,8 @@ EOT
                 }
 
             },
-            "take" => function($item) {
-                switch ($item) {
+            "take" => function($rest) {
+                switch ($rest[0]) {
                     case "milk":
                         if (test_flag('taken_milk')) return "The milk is no longer there.";
                         if (!test_flag('fridge_open')) return "You can't see milk.";
@@ -61,8 +62,8 @@ EOT
                  }
  
             },
-            "examine" => function($item) {
-                 switch ($item) {
+            "examine" => function($rest) {
+                 switch ($rest[0]) {
                      case "fridge": 
                          if (!test_flag('fridge_open')) return "It is closed.";
                          $str = "It contains:\n";

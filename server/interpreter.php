@@ -7,12 +7,29 @@ class Interpreter {
 
     public $room;
 
-    public function interpret($command) {
-        $words = split(" +", $command);
+    public $ignored_words = array(
+        "the" => true,
+        "a" => true
+    );
+
+    public function interpret($command, $using_default = false) {
+        $all_words = split(" +", $command);
+
+        // put the non-ignored words into an array
+        $words = array();
+        foreach ($all_words as $word) {
+            if (!isset($this->ignored_words[$word])) {
+                $words[] = $word;
+            }
+        }
+
+        if (empty($words)) {
+            return null;
+        }
 
         // test for room specific verb
         if (isset($words[1])) {
-            $room_specific = $this->room->apply_verb($words[0], $words[1]);
+            $room_specific = $this->room->apply_verb($words[0], array_slice($words, 1));
             if ($room_specific != null) {
                 return $room_specific;
             }
@@ -21,20 +38,35 @@ class Interpreter {
         // test for all the builtin commands
         switch ($words[0]) {
         case "go": return $this->go($words[1]);
-        case "look": return $this->look();
+        case "look": 
+        case "l":
+            return $this->look();
         case "take": return $this->take($words[1]);
-        case "inventory": return $this->inventory();
+        case "inventory": 
+        case "inv":
+        case "i":
+            return $this->inventory();
         case "drop": return $this->drop($words[1]);
         case "exits": return $this->exits();
         case "help": return $this->help();
         case "restart": restart();
 
         default: 
-                          if ($this->go_test($words[0])) {
-                              return $this->go($words[0]);
-                          } else {
-                              return "Unknown command.";
-                          }
+
+            // try using the default verb of this room
+            if (!$using_default) {
+                $default_test = $this->interpret($this->room->default_verb() . " " . $command, true);
+                if ($default_test != null) {
+                    return $default_test;
+                }
+            }
+
+            // then try interpreting the command as a direction
+            if ($this->go_test($words[0])) {
+                return $this->go($words[0]);
+            } else {
+                return null;
+            }
         }
 
     }

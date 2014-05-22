@@ -5,6 +5,7 @@ include_once("rooms/living_room.php");
 include_once("rooms/kitchen.php");
 include_once("rooms/steves_room.php");
 include_once("rooms/bathroom.php");
+include_once("rooms/laundry.php");
 
 # Create room objects
 $foyer = new Foyer();
@@ -13,6 +14,7 @@ $living_room = new LivingRoom();
 $kitchen = new Kitchen();
 $steves_room = new StevesRoom();
 $bathroom = new Bathroom();
+$laundry = new Laundry();
 
 # Declare list of rooms
 $room_array = array(
@@ -21,7 +23,8 @@ $room_array = array(
     $living_room,
     $kitchen,
     $steves_room,
-    $bathroom
+    $bathroom,
+    $laundry
 );
 
 # Declare connections between rooms and locked connections
@@ -38,6 +41,8 @@ $landing->connect("east", $steves_room);
 $steves_room->connect("west", $landing);
 $landing->connect("west", $bathroom);
 $bathroom->connect("east", $landing);
+$kitchen->connect("right", $laundry);
+$laundry->connect("aft", $kitchen);
 
 $all_rooms = array();
 foreach ($room_array as $room) {

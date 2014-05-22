@@ -59,4 +59,10 @@ class Room {
 
     }
 
+    /* prepended to commands that do not match any recognized verbs and
+     * the interpreting is re-attempted
+     */
+    public function default_verb() {
+        return "";
+    }
 }
