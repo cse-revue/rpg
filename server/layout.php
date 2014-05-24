@@ -86,7 +86,7 @@ $caveentrance->connect("north", $lavatube);
 $lavatube->connect("south", $caveentrance);
 $lavatube->connect("east", $reef);
 $reef->connect("west", $lavatube);
-$reef->connect("east", $shipwreck);
+$reef->double_connect("east", $shipwreck);
 
 $caveentrance->double_connect("south", $cave1);
 $cave1->double_connect("west", $cave2);
