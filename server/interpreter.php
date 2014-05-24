@@ -90,7 +90,8 @@ EOT
     }
 
     public function look() {
-        $str = sprintf("[%s]\n%s\n", $this->room->name, $this->room->description);
+        $str = sprintf("[%s (%s)]\n%s\n", $this->room->name, $this->room->id, $this->room->description);
+
         $items = array();
         $room_inventory = room_inventory_as_array($this->room->id); 
         foreach ($room_inventory as $item => $description) {
@@ -177,7 +178,7 @@ EOT
 
         $this->change_room($this->room->exits[$direction]);
         $this->room->on_enter();
-        return sprintf("%sYou go %s.\n[%s]\n%s", $unlock_msg, $direction, $this->room->name, $this->room->description);
+        return sprintf("%sYou go %s.\n[%s (%s)]\n%s", $unlock_msg, $direction, $this->room->name, $this->room->id, $this->room->description);
     }
 
     private function go_test($direction) {

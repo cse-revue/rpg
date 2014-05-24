@@ -12,10 +12,9 @@ init_inventory();
 init_rooms();
 
 if (!isset($_SESSION['room'])) {
-    $_SESSION['room'] = 'foyer';
+    $_SESSION['room'] = 'anemone';
     init_room_inventory($all_rooms);
 }
-
 
 $i->room = $all_rooms[$_SESSION['room']];
 
@@ -37,7 +36,7 @@ function startup_text() {
     global $i;
 
     echo nl2br(htmlspecialchars(sprintf(<<<EOT
-Welcome to "Middle Earth"! Your goal is to get to Steve's room.
+Ctrl+F Nemo
 
 %s
 %s
@@ -51,7 +50,7 @@ function restart() {
     global $i;
 
     session_destroy();
-    $_SESSION['room'] = 'foyer';
+    $_SESSION['room'] = 'anemone';
     $i->room = $all_rooms[$_SESSION['room']];
     init_room_inventory($all_rooms);
 
